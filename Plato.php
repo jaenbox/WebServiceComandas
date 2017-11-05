@@ -33,6 +33,45 @@ class Plato
             return false;
         }
     }
+
+    /*
+        insert
+    */
+    public static function insert($id, $name, $price, $path, $description, $category) {
+
+        $sql = "INSERT INTO plato ( ". 
+                "id,".           
+                " name,".
+                " price,".
+                " path,".
+                " description,".
+                " category )".
+                " VALUES ( ?, ?, ?, ?, ?, ? )";
+
+        $sentencia = Database::getInstance()->getDb()->prepare($sql);
+
+        return $sentencia->execute(array(
+            $id,
+            $name,
+            $price,
+            $path,
+            $description,
+            $category
+            ));
+    }
+
+    public static function getLast() {
+
+        $sql = "SELECT MAX(id) FROM plato";
+
+        // Preparar sentencia
+        $comando = Database::getInstance()->getDb()->prepare($sql);
+        // Ejecutar sentencia preparada
+        $comando->execute();
+
+        return $comando->fetchAll(PDO::FETCH_ASSOC);
+        
+    }
 }
 
 ?>

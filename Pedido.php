@@ -13,7 +13,7 @@ class Pedido {
     /**
      * Retorna todas las filas del usuarios logueado de la tabla 'pedido'
      *
-     * @param $idMeta Identificador del registro
+     * @param $id Identificador del registro
      * @return array Datos del registro
      */
     public static function getAll($idUser) {
@@ -26,6 +26,33 @@ class Pedido {
         $consulta = "SELECT p.id, p.id_mesa, p.fecha, p.pagado, p.estado, p.id_user 
         			FROM pedido p 
         			WHERE p.id_user = :id_user AND p.fecha = :fecha";
+        try {
+            // Preparar sentencia
+            $pedido = Database::getInstance()->getDb()->prepare($consulta);
+            // Ejecutar sentencia preparada
+            $pedido->execute(array('id_user' => $idUser, 'fecha' => $fecha));
+
+            return $pedido->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public static function getLast($idUser) {
+        /*Formato de fecha del servidor */
+        $fecha = date('Y-m-d');
+        $formato = 'Y-m-d';
+        $fecha = \DateTime::createFromFormat($formato, $fecha);
+        $fecha = date_format($fecha, 'Y-m-d');
+        
+        $consulta = "SELECT p.id, p.id_mesa, p.fecha, p.id_user, pl.name, pl.price, c.observaciones
+					FROM comanda as c
+					INNER JOIN pedido as p ON p.id = c.id_pedido
+					INNER JOIN plato as pl ON c.id_plato = pl.id
+					WHERE p.id_user = :id_user AND p.fecha = :fecha AND c.id_pedido = 
+						(SELECT max(p.id)
+						FROM pedido as p)";
         try {
             // Preparar sentencia
             $pedido = Database::getInstance()->getDb()->prepare($consulta);

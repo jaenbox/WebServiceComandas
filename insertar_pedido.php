@@ -29,6 +29,7 @@
 				for($i=0; $i < $num_platos; $i++) {
 					$platos[$i] = $body['plato'.$i];
 				}
+
 				$retornoComanda = false;
 
 				for($i=0; $i < $num_platos; $i++) {
@@ -51,9 +52,9 @@
 				if($retornoComanda) {
 					echo json_encode(
 	            		array(
-		                	'estado' => '1',
-		                	'mensaje' => 'Creación éxitosa')
-	        		);	
+	               			'estado' => '1',
+	                		'mensaje' => 'Pedido tramitado')
+	        			);						
 				} else {
 					// Código de falla
 	        		echo json_encode(
@@ -75,7 +76,7 @@
         	echo json_encode(
             	array(
                		'estado' => '2',
-                	'mensaje' => 'RetornoPedido fallida')
+                	'mensaje' => 'Retorno Pedido fallida')
         	);
 		}	
 	}

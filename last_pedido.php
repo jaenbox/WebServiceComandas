@@ -10,11 +10,11 @@ $idUser = $_REQUEST['user'];
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // Manejar petición GET
-    $pedidos = Pedido::getAll($idUser);
+    $pedidos = Pedido::getLast($idUser);
 
     if ($pedidos) {
 
-        $datos["pedidos"] = $pedidos;
+        $datos["pedido"] = $pedidos;
 
         print json_encode($datos);
         
